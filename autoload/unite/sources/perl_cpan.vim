@@ -1,5 +1,5 @@
 "==============================================================================
-" File: perl_use.vim
+" File: perl_cpan.vim
 " Last Change: 17 Dec 2012
 " Maintainer: Yuuki Tsubouchi <yuki.tsubo at gmail.com>
 " License: MIT license  {{{
@@ -31,12 +31,12 @@ set cpo&vim
 
 let s:source = {
             \ "name" : "perl/use",
-            \ "description" : "Perl library to use",
-            \ "default_action" : {"common" : "use"},
+            \ "description" : "Perl cpan module name",
+            \ "default_action" : {"common" : "cpan"},
             \ "action_table" : {},
             \ }
 
-function! unite#sources#perl_use#define()
+function! unite#sources#perl_cpan#define()
     return s:source
 endfunction
 
