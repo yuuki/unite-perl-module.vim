@@ -30,25 +30,25 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:source = {
-      \ "name" : "perl/cpan",
-      \ "description" : "Perl cpan module name",
-      \ "default_action" : {"common" : "cpan"},
+      \ "name" : "perl/lib",
+      \ "description" : "Perl local module name",
+      \ "default_action" : {"common" : "lib"},
       \ "action_table" : {},
       \ }
 
-function! unite#sources#perl_cpan#define()
+function! unite#sources#perl_lib#define()
   return s:source
 endfunction
 
 function! s:source.gather_candidates(args, context)
-  return unite_perl_module_util#get_cpan_candidates()
+  return unite_perl_module_util#get_lib_candidates()
 endfunction
 
-let s:source.action_table.cpan = {
+let s:source.action_table.lib = {
       \ 'description' : 'use perl modules'
       \ }
 
-function! s:source.action_table.cpan.func(candidate)
+function! s:source.action_table.lib.func(candidate)
   let use_statement = 'use ' . a:candidate.word . ';'
   execute 'put!' '='''.use_statement.''''
 endfunction
