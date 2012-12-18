@@ -36,12 +36,36 @@ let s:source = {
       \ "action_table" : {},
       \ }
 
+let s:project_root_files = ['.git', '.gitmodules', 'Makefile.PL', 'Build.PL']
+let s:lib_dirs = ['lib/', 'extlib/', 'local/lib/perl5/']
+let s:archname = unite#util#system('perl -MConfig -e '."'".'print $Config{archname}'."'")
+
 function! unite#sources#perl_local#define()
   return s:source
 endfunction
 
+function! s:fullpath_to_module_name(root_directory, fullpath)
+  let lib_dir_regexp = '\('.join(s:lib_dirs, '\|').'\)'.'\('.s:archname.'/\)\?'
+  let name = matchstr(a:fullpath, a:root_directory.lib_dir_regexp.'\zs.*\ze\.pm')
+  return substitute(name, '/', '::', 'g')
+endfunction
+
 function! s:source.gather_candidates(args, context)
-  return unite_perl_module_util#get_local_candidates()
+  let root_path = unite_perl_module_util#find_root_directory(getcwd(), s:project_root_files)
+  if root_path ==# ''
+    return []
+  endif
+
+  let inc_fullpaths = []
+  for inc in map(copy(s:lib_dirs), 'simplify(root_path . "/" . v:val)')
+    let paths = split(glob(inc . "/**/*.pm"), '\n')
+    call extend(inc_fullpaths, paths)
+  endfor
+
+  return map(inc_fullpaths, "{
+        \ 'word' : s:fullpath_to_module_name(root_path, simplify(v:val)),
+        \ 'source' : 'lib',
+        \ }")
 endfunction
 
 let s:source.action_table.local = {

@@ -41,7 +41,21 @@ function! unite#sources#perl_global#define()
 endfunction
 
 function! s:source.gather_candidates(args, context)
-  return unite_perl_module_util#get_global_candidates()
+  let cpan_list = split(unite#util#system("cpan -l 2>/dev/null | cut -f1"), "\n")
+
+  if v:shell_error
+    echohl Error
+    for error in cpan_list
+      echohl error
+    endfor
+    echohl None
+    return []
+  endif
+
+  return map(cpan_list, "{
+        \ 'word' : v:val,
+        \ 'source' : 'cpan',
+        \ }")
 endfunction
 
 let s:source.action_table.global = {
