@@ -49,6 +49,7 @@ endfunction
 
 let s:project_root_files = ['.git', '.gitmodules', 'Makefile.PL', 'Build.PL']
 let s:lib_dirs = ['lib/', 'extlib/', 'local/lib/perl5/']
+let s:archname = unite#util#system('perl -MConfig -e '."'".'print $Config{archname}'."'")
 
 function! s:find_root_directory(current_dir)
   if a:current_dir ==# '/'
@@ -63,7 +64,7 @@ function! s:find_root_directory(current_dir)
 endfunction
 
 function! s:fullpath_to_module_name(root_directory, fullpath)
-  let lib_dir_regexp = '\('.join(s:lib_dirs, '\|').'\)'
+  let lib_dir_regexp = '\('.join(s:lib_dirs, '\|').'\)'.'\('.s:archname.'/\)\?'
   let name = matchstr(a:fullpath, a:root_directory.lib_dir_regexp.'\zs.*\ze\.pm')
   return substitute(name, '/', '::', 'g')
 endfunction
