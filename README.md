@@ -8,13 +8,13 @@ It is inspired by [rhysd/unite-ruby-require.vim](https://github.com/rhysd/unite-
 
 ### Global Module List
 ```vim
-:Unite perl/cpan
+:Unite perl/global
 ```
 
 ### Local Module List
 It searches module in 'lib', 'extlib', 'local/perl5/lib' directories in your project.
 ```vim
-:Unite perl/lib
+:Unite perl/local
 ```
 
 ## Notice

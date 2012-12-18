@@ -1,5 +1,5 @@
 "==============================================================================
-" File: perl_cpan.vim
+" File: perl_local.vim
 " Last Change: 18 Dec 2012
 " Maintainer: Yuuki Tsubouchi <yuki.tsubo at gmail.com>
 " License: MIT license  {{{
@@ -30,25 +30,25 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:source = {
-      \ "name" : "perl/cpan",
-      \ "description" : "Perl cpan module name",
-      \ "default_action" : {"common" : "cpan"},
+      \ "name" : "perl/local",
+      \ "description" : "Perl local module name",
+      \ "default_action" : {"common" : "local"},
       \ "action_table" : {},
       \ }
 
-function! unite#sources#perl_cpan#define()
+function! unite#sources#perl_local#define()
   return s:source
 endfunction
 
 function! s:source.gather_candidates(args, context)
-  return unite_perl_module_util#get_cpan_candidates()
+  return unite_perl_module_util#get_local_candidates()
 endfunction
 
-let s:source.action_table.cpan = {
+let s:source.action_table.local = {
       \ 'description' : 'use perl modules'
       \ }
 
-function! s:source.action_table.cpan.func(candidate)
+function! s:source.action_table.local.func(candidate)
   let use_statement = 'use ' . a:candidate.word . ';'
   execute 'put!' '='''.use_statement.''''
 endfunction

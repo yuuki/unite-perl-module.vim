@@ -29,7 +29,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! unite_perl_module_util#get_cpan_candidates()
+function! unite_perl_module_util#get_global_candidates()
   let cpan_list = split(unite#util#system("cpan -l 2>/dev/null | cut -f1"), "\n")
 
   if v:shell_error
@@ -68,7 +68,7 @@ function! s:fullpath_to_module_name(root_directory, fullpath)
   return substitute(name, '/', '::', 'g')
 endfunction
 
-function! unite_perl_module_util#get_lib_candidates()
+function! unite_perl_module_util#get_local_candidates()
   let root_path = s:find_root_directory(getcwd())
   if root_path ==# ''
     return []
