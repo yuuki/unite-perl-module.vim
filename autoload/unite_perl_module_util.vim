@@ -1,5 +1,5 @@
 "==============================================================================
-" File: perl_use.vim
+" unite_perl_module_util.git
 " Last Change: 17 Dec 2012
 " Maintainer: Yuuki Tsubouchi <yuki.tsubo at gmail.com>
 " License: MIT license  {{{
@@ -24,34 +24,20 @@
 " }}}
 "==============================================================================
 
-scriptencoding utf-8
+function! unite_perl_module_util#get_cpan_candidates()
+    let cpan_list = split(unite#util#system("cpan -l 2>/dev/null | cut -f1"), "\n")
 
-let s:save_cpo = &cpo
-set cpo&vim
+    if v:shell_error
+        echohl Error
+        for error in cpan_list
+            echohl error
+        endfor
+        echohl None
+        return []
+    endif
 
-let s:source = {
-            \ "name" : "perl/use",
-            \ "description" : "Perl library to use",
-            \ "default_action" : {"common" : "use"},
-            \ "action_table" : {},
-            \ }
-
-function! unite#sources#perl_use#define()
-    return s:source
+    return map(cpan_list, "{
+                \ 'word' : v:val,
+                \ 'source' : 'cpan',
+                \ }")
 endfunction
-
-function! s:source.gather_candidates(args, context)
-  return unite_perl_module_util#get_cpan_candidates()
-endfunction
-
-let s:source.action_table.use = {
-            \ 'description' : 'use perl modules'
-            \ }
-
-function! s:source.action_table.use.func(candidate)
-    let use_statement = 'use ' . a:candidate.word . ';'
-    execute 'put!' '='''.use_statement.''''
-endfunction
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
