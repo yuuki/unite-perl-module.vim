@@ -6,8 +6,15 @@ It is inspired by [rhysd/unite-ruby-require.vim](https://github.com/rhysd/unite-
 
 ## Usage
 
+### Global Module List
 ```vim
-:Unite perl/use
+:Unite perl/cpan
+```
+
+### Local Module List
+It searches module in 'lib', 'extlib', 'local/perl5/lib' directories in your project.
+```vim
+:Unite perl/lib
 ```
 
 ## Notice
